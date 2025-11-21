@@ -5,3 +5,4 @@ flet
 test.c
 test
 vgcore.*
+*.o

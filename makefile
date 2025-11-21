@@ -1,5 +1,9 @@
 flags = -Wall -g
 
 .PHONY: 
-target:
-	gcc $(flags) -o flet flet.c
+target: tokenizer.o
+	gcc $(flags) -o flet flet.c tokenizer.o
+
+
+tokenizer.o: tokenizer.c
+	gcc $(flags) -c -o tokenizer.o tokenizer.c

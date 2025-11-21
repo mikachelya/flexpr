@@ -1,4 +1,6 @@
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "flet.h"
 
 
@@ -19,7 +21,7 @@ int main(int argc, char** argv) {
 
     int ntokens;
     token_t* tokenstream = tokenize(argc - 1, &argv[1], &ntokens);
-    shuntingyard(tokenstream, ntokens);
+    // shuntingyard(tokenstream, ntokens);
 
 
     destroytokenstream(tokenstream, ntokens);
