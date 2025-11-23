@@ -21,8 +21,9 @@ int main(int argc, char** argv) {
 
     int ntokens;
     token_t* tokenstream = tokenize(argc - 1, &argv[1], &ntokens);
-    // shuntingyard(tokenstream, ntokens);
+    int npostfix;
+    token_t* postfix = shuntingyard(tokenstream, ntokens, &npostfix);
 
-
-    destroytokenstream(tokenstream, ntokens);
+    free(tokenstream);
+    free(postfix);
 }

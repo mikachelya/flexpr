@@ -11,29 +11,8 @@
 #define __USE_MISC 1
 #include <math.h>
 
-
 #define NOHIGHLIGHT -1
 
-typedef enum Token_type {
-    // INT,
-    // FLOAT,
-    PRIMARY,
-    UNARY,
-    BINARY,
-    FUNC,
-    LBRACKET,
-    RBRACKET,
-    COMMA,
-    NONE,
-} Token_type;
-
-typedef struct token_t {
-    Token_type type;
-    char* tokenstring;
-    int len;
-    int numargs;
-    double value;
-} token_t;
 
 void printtokens(token_t* tokens, int n, int highlight, FILE* fp);
 
@@ -143,11 +122,12 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             
         }
 
-        char* tokenstring = (char*)malloc((len + 1) * sizeof(char));
-        memcpy(tokenstring, current, len * sizeof(char));
-        tokenstring[len] = 0;
+        // char* tokenstring = (char*)malloc((len + 1) * sizeof(char));
+        // memcpy(tokenstring, current, len * sizeof(char));
+        // tokenstring[len] = 0;
         currenttoken->len = len;
-        currenttoken->tokenstring = tokenstring;
+        // currenttoken->tokenstring = tokenstring;
+        currenttoken->tokenstring = current;
         prevtype = currenttoken->type;
         
 
@@ -172,10 +152,12 @@ void printtokens(token_t* tokens, int n, int highlight, FILE* fp) {
     int printed = 0, highlightlen = 0;
     for (int i = 0; i < n; i++) {
         token_t current = tokens[i];
-        int len = fprintf(fp, "%s", current.tokenstring);
+        int len = fprintf(fp, "%.*s", current.len, current.tokenstring);
+        // if (current.type == FUNC)
+        //     fprintf(fp, "(%d args)", current.numargs);
         bool space = true;
         
-        if (current.type == LBRACKET || current.type == FUNC
+        if (current.type == LBRACKET || (current.type == FUNC && i < n - 1 && tokens[i + 1].type == LBRACKET)
             || (i < n - 1 && (tokens[i + 1].type == COMMA || tokens[i + 1].type == RBRACKET))) {
             space = false;
         }
@@ -197,19 +179,6 @@ void printtokens(token_t* tokens, int n, int highlight, FILE* fp) {
             putc('^', fp);
         putc('\n', fp);
     }
-}
-
-
-void destroytoken(token_t* token) {
-    free(token->tokenstring);
-}
-
-
-void destroytokenstream(token_t* tokenstream, int n) {
-    for (int i = 0; i < n; i++) {
-        destroytoken(&tokenstream[i]);
-    }
-    free(tokenstream);
 }
 
 
