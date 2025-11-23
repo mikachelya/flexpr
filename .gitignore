@@ -1,8 +1,5 @@
 flet
-.vscode/launch.json
-.vscode/settings.json
-.vscode/tasks.json
-test.c
-test
+.vscode
+test*
 vgcore.*
-*.o
+object

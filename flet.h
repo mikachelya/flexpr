@@ -30,10 +30,11 @@ typedef struct token_t {
 void printtokens(token_t* tokens, int n, int highlight, FILE* fp);
 token_t* tokenize(int argc, char** argv, int* ntokens);
 void printtokens(token_t* tokens, int n, int highlight, FILE* fp);
-void destroytoken(token_t* token);
-void destroytokenstream(token_t* tokenstream, int n);
 
 // shutingyard.c
 token_t* shuntingyard(token_t* input, int ninput, int* n);
+
+// evaluator.x
+void evaluate(token_t* postfix, int npostfix);
 
 #endif /* flet.h */
