@@ -22,8 +22,15 @@ typedef struct token_t {
     char* tokenstring;
     int len;
     int numargs;
+    int tokenidx;
     double value;
 } token_t;
+
+typedef struct param_t {
+    double epsilon;
+    int ndigits;
+    char integer;
+} param_t;
 
 
 // tokenizer.c
@@ -35,6 +42,6 @@ void printtokens(token_t* tokens, int n, int highlight, FILE* fp);
 token_t* shuntingyard(token_t* input, int ninput, int* n);
 
 // evaluator.x
-void evaluate(token_t* postfix, int npostfix);
+double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t params);
 
 #endif /* flet.h */

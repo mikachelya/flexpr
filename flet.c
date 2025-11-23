@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <float.h>
 #include "flet.h"
 
 
@@ -18,12 +19,18 @@ int main(int argc, char** argv) {
         printf("Usage: %s [arguments].\n", argv[0]);
         exit(0);
     }
+    
+    param_t params;
+    params.epsilon = DBL_EPSILON;
+    // params.epsilon = 0.001;
+    params.ndigits = 10;
+    params.integer = 0;
 
     int ntokens;
     token_t* tokenstream = tokenize(argc - 1, &argv[1], &ntokens);
     int npostfix;
     token_t* postfix = shuntingyard(tokenstream, ntokens, &npostfix);
-    // evaluate(postfix, npostfix);
+    evaluate(postfix, tokenstream, npostfix, ntokens, params);
 
     free(tokenstream);
     free(postfix);

@@ -64,6 +64,7 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
         case UNARY:
             if (prevtype == UNARY)
                 ERROR(ERR_OPERAND);
+            current->numargs = 1;
             stack[++top] = *current;
             break;
         
@@ -73,6 +74,7 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
             while (top >= 0 && stack[top].type != LBRACKET 
                 && precedence[(int)(stack[top].tokenstring[0])] >= precedence[(int)(current->tokenstring[0])])
                 output[noutput++] = stack[top--];
+            current->numargs = 2;
             stack[++top] = *current;
             break;
         
@@ -129,11 +131,11 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
         output[noutput++] = stack[top--];
     }
 
+    printf("postfix: ");
     printtokens(output, noutput, NOHIGHLIGHT, stdout);
     *n = noutput;
     free(stack);
     return output;
-
 }
 
 #endif

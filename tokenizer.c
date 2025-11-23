@@ -60,7 +60,7 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             // read decimal number
             // printf("read decimal ");
             char *end;
-            float value = strtod(current, &end);
+            double value = strtod(current, &end);
             len = end - current;
             // printf("len=%d ", len);
             if (len == 0) {
@@ -112,7 +112,7 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             else if (prevtype == PRIMARY || prevtype == RBRACKET) {
                 currenttoken->type = BINARY;
                 currenttoken->numargs = 2;
-                if (current[1] == '=')
+                if (current[1] == '=' || strncmp(current, "&&", 2) == 0 || strncmp(current, "||", 2) == 0)
                     len++;
             }
             else {
@@ -122,12 +122,9 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             
         }
 
-        // char* tokenstring = (char*)malloc((len + 1) * sizeof(char));
-        // memcpy(tokenstring, current, len * sizeof(char));
-        // tokenstring[len] = 0;
         currenttoken->len = len;
-        // currenttoken->tokenstring = tokenstring;
         currenttoken->tokenstring = current;
+        currenttoken->tokenidx = n - 1;
         prevtype = currenttoken->type;
         
 
@@ -141,6 +138,7 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
         // }
     }
 
+    printf("tokenizer: ");
     printtokens(tokenstream, n, NOHIGHLIGHT, stdout);
 
     *ntokens = n;
