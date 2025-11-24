@@ -154,10 +154,10 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
 
             if (current->numargs == 2) {
                 evalled = true;
-                double operand = stack[top--].value;
+                double operand = stack[top].value;
                 strswitch(current->tokenstring, current->len);
                 strcase("pow")
-                    stack[top].value = pow(stack[top].value, operand);
+                    stack[top].value = pow(stack[--top].value, operand);
                 else evalled = false;
             }
 
