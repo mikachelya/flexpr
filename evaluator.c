@@ -23,11 +23,6 @@
 #define ERR_FUNC "unknown function for the given number of operands"
 
 
-double dabs(double a) {
-    return a < 0 ? -a : a;
-}
-
-
 double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t params) {
     int top = -1;
     double epsilon = params.epsilon;
@@ -53,7 +48,7 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 break;
 
             case '!':
-                if (dabs(stack[top].value) < epsilon)
+                if (fabs(stack[top].value) < epsilon)
                     stack[top].value = 0;
                 stack[top].value = !stack[top].value;
                 break;
@@ -86,10 +81,12 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 case '<':
                     stack[top].value = stack[top].value < operand - epsilon;
                     break;
-                // questionable
-                // case '%':
-                //     stack[top].value = (double)(stack[top].value % (int)operand);
-                //     break;
+                case '%':
+                    double value = fmod(stack[top].value, operand);
+                    if (fabs(value - operand) < epsilon)
+                        value = 0;
+                    stack[top].value = value;
+                    break;
 
                 default:
                     ERROR(ERR_BINARY);
@@ -108,16 +105,16 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 strcase("<=")
                     stack[top].value = stack[top].value < operand + epsilon;
                 strcase("&&") {
-                    if (dabs(stack[top].value) < epsilon)
+                    if (fabs(stack[top].value) < epsilon)
                         stack[top].value = 0;
-                    if (dabs(operand) < epsilon)
+                    if (fabs(operand) < epsilon)
                         operand = 0;
                     stack[top].value = stack[top].value && operand;
                 }
                 strcase("||") {
-                    if (dabs(stack[top].value) < epsilon)
+                    if (fabs(stack[top].value) < epsilon)
                         stack[top].value = 0;
-                    if (dabs(operand) < epsilon)
+                    if (fabs(operand) < epsilon)
                         operand = 0;
                     stack[top].value = stack[top].value || operand;
                 }
@@ -133,7 +130,7 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 double operand = stack[top].value;
                 strswitch(current->tokenstring, current->len);
                 strcase("abs")
-                    stack[top].value = dabs(operand);
+                    stack[top].value = fabs(operand);
                 strcase("sin")
                     stack[top].value = sin(operand);
                 strcase("cos")
@@ -146,6 +143,12 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                     stack[top].value = log(operand);
                 strcase("log")
                     stack[top].value = log10(operand);
+                strcase("floor")
+                    stack[top].value = floor(operand);
+                strcase("ceil")
+                    stack[top].value = ceil(operand);
+                strcase("round")
+                    stack[top].value = round(operand);
                 else evalled = false;
             }
 
@@ -189,6 +192,22 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                     for (int j = 0; j < current->numargs; j++)
                         prod *= stack[top--].value;
                     stack[++top].value = prod;
+                }
+                strcase("any") {
+                    double res = 0;
+                    for (int j = 0; j < current->numargs; j++) {
+                        if (fabs(stack[top--].value) >= epsilon)
+                            res = 1;
+                    }
+                    stack[++top].value = res;
+                }
+                strcase("all") {
+                    double res = 1;
+                    for (int j = 0; j < current->numargs; j++) {
+                        if (fabs(stack[top--].value) < epsilon)
+                            res = 0;
+                    }
+                    stack[++top].value = res;
                 }
                 else ERROR(ERR_FUNC);
             }

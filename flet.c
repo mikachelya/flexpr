@@ -7,7 +7,7 @@
 
 int main(int argc, char** argv) {
     // for (int i = 0; i < argc; i++) {
-    //     printf("arg[%d] = '%s'\n", i, argv[i]);
+    //     printf("argv[%d] = '%s'\n", i, argv[i]);
     // }   
 
     if (argc == 1) {
@@ -22,8 +22,7 @@ int main(int argc, char** argv) {
     
     param_t params;
     params.epsilon = DBL_EPSILON;
-    // params.epsilon = 0.001;
-    params.ndigits = 10;
+    params.ndigits = 20;
     params.integer = 0;
 
     int ntokens;
