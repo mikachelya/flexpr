@@ -16,7 +16,7 @@
     {                                                                                          \
         fprintf(stderr, "Error: %s \"%.*s\".\n", message, current->len, current->tokenstring); \
         printtokens(original, noriginal, current->tokenidx, stderr);                           \
-        exit(1);                                                                               \
+        exit(3);                                                                               \
     }
 #define ERR_UNARY "unknown unary operator"
 #define ERR_BINARY "unknown binary operator"

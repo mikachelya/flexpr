@@ -9,7 +9,7 @@
     {                                                 \
         fprintf(stderr, "Error: %s.\n", message);     \
         printtokens(input, ninput, i, stderr);        \
-        exit(1);                                      \
+        exit(2);                                      \
     }
 #define ERR_OPERATOR "expected operator"
 #define ERR_OPERAND "expected operand"
@@ -25,10 +25,12 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
     token_t* stack = (token_t*)malloc(ninput * sizeof(token_t));
 
     char precedence[128];
-    precedence['<'] = 1;
-    precedence['>'] = 1;
-    precedence['!'] = 1;
-    precedence['='] = 1;
+    precedence['|'] = 1;
+    precedence['&'] = 2;
+    precedence['<'] = 3;
+    precedence['>'] = 3;
+    precedence['='] = 3;
+    precedence['!'] = 4;
     precedence['-'] = 5;
     precedence['+'] = 5;
     precedence['/'] = 10;
