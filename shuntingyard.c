@@ -118,7 +118,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
             break;
         
         default:
-            break;
+            printf("Internal error: invalid token type (type=%d)\n", current->type);
+            exit(4);
         }
 
         prevtype = current->type;

@@ -22,20 +22,21 @@ int main(int argc, char** argv) {
         exit(0);
     }
 
-    int startidx;
-    bool found = false;
-    for (startidx = 1; startidx < argc;) {
-        if (strcmp(argv[startidx++], "--") == 0) {
-            found = true;
-            break;
-        }
-    }
-    if (!found)
-        startidx = 1;
-    if (startidx == argc) {
-        fprintf(stderr, "Usage: %s [OPTIONS --] EXPRESSION.\n", argv[0]);
-        exit(1);
-    }
+    // int startidx;
+    // bool found = false;
+    // for (startidx = 1; startidx < argc;) {
+    //     if (strcmp(argv[startidx++], "--") == 0) {
+    //         found = true;
+    //         break;
+    //     }
+    // }
+
+    // if (!found)
+    //     startidx = 1;
+    // if (startidx == argc) {
+    //     fprintf(stderr, "Usage: %s [OPTIONS --] EXPRESSION.\n", argv[0]);
+    //     exit(1);
+    // }
     
     param_t params;
     params.epsilon = DBL_EPSILON;
@@ -44,17 +45,17 @@ int main(int argc, char** argv) {
 
 
     static struct option long_options[] = {
-        // {"version",  no_argument, 0, 'v'},
-        // {"help",     no_argument, 0, 'h'},
-        {"tokenize", no_argument, 0, 't'},
-        {"postfix",  no_argument, 0, 'p'},
+        // {"version",  no_argument, 0, 'V'},
+        // {"help",     no_argument, 0, 'H'},
+        {"tokenize", no_argument, 0, 'T'},
+        {"postfix",  no_argument, 0, 'P'},
         {0,          0,           0,  0 },
     };
 
     // opterr = 0;
     bool done = false;
     while (!done) {
-        char c = getopt_long(startidx, argv, "+tpie:d:", long_options, NULL);
+        char c = getopt_long(argc, argv, "+:TPIE:D:", long_options, NULL);
         switch(c) {
         // case 'v':
         //     printf("0.0.0\n");
@@ -64,23 +65,23 @@ int main(int argc, char** argv) {
         //     fprintf(stderr, "Usage: %s [OPTIONS --] EXPRESSION.\nFor more information, use %s --help\n", argv[0], argv[0]);
         //     exit(0);
         
-        case 't':
+        case 'T':
             params.tokenize = true;
             break;
         
-        case 'p':
+        case 'P':
             params.postfix = true;
             break;
         
-        case 'i':
+        case 'I':
             params.integer = true;
             break;
         
-        case 'e':
+        case 'E':
             params.epsilon = atof(optarg);
             break;
 
-        case 'd':
+        case 'D':
             params.digits = atoi(optarg);
             break;
 
@@ -112,7 +113,14 @@ int main(int argc, char** argv) {
     token_t* tokenstream = tokenize(argc - optind, &argv[optind], &ntokens);
     int npostfix;
     token_t* postfix = shuntingyard(tokenstream, ntokens, &npostfix);
-    evaluate(postfix, tokenstream, npostfix, ntokens, params);
+    double result = evaluate(postfix, tokenstream, npostfix, ntokens, params);
+
+    printf("evaluation: ");
+    if (params.integer == 0)
+        printf("%.*lf\n", params.digits, result);
+    else
+        printf("%ld\n", (long)result);
+
 
     free(tokenstream);
     free(postfix);

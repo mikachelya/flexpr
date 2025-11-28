@@ -1,6 +1,7 @@
 #ifndef _FLET_H
 #define _FLET_H
 #include <stdio.h>
+#include <stdbool.h>
 
 #define NOHIGHLIGHT -1
 
@@ -29,11 +30,11 @@ typedef struct token_t {
 typedef struct param_t {
     // bool version;   // -v --version
     // bool help;      // -h --help
-    bool tokenize;  // -t --tokenize
-    bool postfix;   // -p --postfix
-    bool integer;   // -i
-    double epsilon; // -e // int tolerance;
-    int digits;     // -d
+    bool tokenize;  // -T --tokenize
+    bool postfix;   // -P --postfix
+    bool integer;   // -I
+    double epsilon; // -E // int tolerance;
+    int digits;     // -D
 } param_t;
 
 

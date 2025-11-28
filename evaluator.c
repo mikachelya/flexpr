@@ -10,8 +10,8 @@
 #include <stdbool.h>
 
 
-#define strswitch(str, n) char* _tocompare = str; int _cmplen = n; if(0)
-#define strcase(other) else if (sizeof(other) - 1 == _cmplen && strncmp(_tocompare, other, _cmplen) == 0)
+#define strswitch(str, n) char* strswitch_cmp = str; int strswitch_cmplen = n; if(0)
+#define strcase(other) else if (sizeof(other) - 1 == strswitch_cmplen && strncmp(strswitch_cmp, other, strswitch_cmplen) == 0)
 #define ERROR(message)                                                                         \
     {                                                                                          \
         fprintf(stderr, "Error: %s \"%.*s\".\n", message, current->len, current->tokenstring); \
@@ -156,8 +156,10 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 evalled = true;
                 double operand = stack[top].value;
                 strswitch(current->tokenstring, current->len);
-                strcase("pow")
-                    stack[top].value = pow(stack[--top].value, operand);
+                strcase("pow") {
+                    double result = pow(stack[--top].value, operand);
+                    stack[top].value = result;
+                }
                 else evalled = false;
             }
 
@@ -215,18 +217,10 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
             break;
 
         default:
-            printf("Error: invalid token type (type=%d)\n", current->type);
-            exit(1);
+            printf("Internal error: invalid token type (type=%d)\n", current->type);
+            exit(4);
         }
     }
-
-
-    printf("evaluation: ");
-    if (params.integer == 0)
-        printf("%.*lf\n", params.ndigits, stack[top].value);
-    else
-        printf("%ld\n", (long)stack[top].value);
-
 
     return stack[top].value;
 }
