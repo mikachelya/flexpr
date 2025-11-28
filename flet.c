@@ -6,16 +6,15 @@
 #include <getopt.h>
 #include "flet.h"
 
+#define ERR_NO_EXPRESSION                                                                                            \
+    {                                                                                                                \
+        fprintf(stderr, "Usage: %s [OPTIONS] EXPRESSION.\nFor more information, use %s --help\n", argv[0], argv[0]); \
+        exit(1);                                                                                                     \
+    }
 
 int main(int argc, char** argv) {
-    // for (int i = 0; i < argc; i++) {
-    //     printf("argv[%d] = '%s'\n", i, argv[i]);
-    // }   
-
-    if (argc == 1) {
-        fprintf(stderr, "Usage: %s [OPTIONS] EXPRESSION.\nFor more information, use %s --help\n", argv[0], argv[0]);
-        exit(argc == 1 ? 1 : 0);
-    }
+    if (argc == 1)
+        ERR_NO_EXPRESSION;
 
     param_t params;
     params.epsilon = DBL_EPSILON;
@@ -74,10 +73,8 @@ int main(int argc, char** argv) {
         }
     }
 
-    if (optind >= argc) {
-        fprintf(stderr, "Usage: %s [OPTIONS] EXPRESSION.\nFor more information, use %s --help\n", argv[0], argv[0]);
-        exit(1);
-    }
+    if (optind >= argc)
+        ERR_NO_EXPRESSION;
 
     int ntokens;
     token_t* tokenstream = tokenize(argc - optind, &argv[optind], &ntokens);
