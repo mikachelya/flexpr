@@ -134,8 +134,6 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
         output[noutput++] = stack[top--];
     }
 
-    printf("postfix: ");
-    printtokens(output, noutput, NOHIGHLIGHT, stdout);
     *n = noutput;
     free(stack);
     return output;

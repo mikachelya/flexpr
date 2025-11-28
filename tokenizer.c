@@ -138,9 +138,6 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
         // }
     }
 
-    printf("tokenizer: ");
-    printtokens(tokenstream, n, NOHIGHLIGHT, stdout);
-
     *ntokens = n;
     return tokenstream;
 }
