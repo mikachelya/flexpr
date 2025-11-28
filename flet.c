@@ -116,4 +116,6 @@ int main(int argc, char** argv) {
 
     free(tokenstream);
     free(postfix);
+
+    return 0;
 }
