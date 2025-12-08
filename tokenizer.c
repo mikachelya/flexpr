@@ -148,10 +148,8 @@ void printtokens(token_t* tokens, int n, int highlight, FILE* fp) {
     for (int i = 0; i < n; i++) {
         token_t current = tokens[i];
         int len = fprintf(fp, "%.*s", current.len, current.tokenstring);
-        // if (current.type == FUNC)
-        //     fprintf(fp, "(%d args)", current.numargs);
-        bool space = true;
         
+        bool space = true;
         if (current.type == LBRACKET || (current.type == FUNC && i < n - 1 && tokens[i + 1].type == LBRACKET)
             || (i < n - 1 && (tokens[i + 1].type == COMMA || tokens[i + 1].type == RBRACKET))) {
             space = false;
@@ -168,9 +166,8 @@ void printtokens(token_t* tokens, int n, int highlight, FILE* fp) {
     putc('\n', fp);
 
     if (highlight != NOHIGHLIGHT) {
-        for (int i = 0; i < printed; i++)
-            putc(' ', fp);
-        for (int i = 0; i < highlightlen; i++)
+        fprintf(fp, "%*s", printed + 1, "^");
+        for (int i = 1; i < highlightlen; i++)
             putc('^', fp);
         putc('\n', fp);
     }
