@@ -8,6 +8,7 @@
 #include <math.h>
 #include <float.h>
 #include <stdbool.h>
+#include <assert.h>
 
 
 #define strswitch(str, n) char* strswitch_cmp = str; int strswitch_cmplen = n; if(0)
@@ -21,12 +22,56 @@
 #define ERR_UNARY "unknown unary operator"
 #define ERR_BINARY "unknown binary operator"
 #define ERR_FUNC "unknown function for the given number of operands"
+#define MZERO 0x8000000000000000 // bits corresponding to a double value of -0
+
+typedef union bitcast {
+    long long l;
+    double d;
+} bitcast;
+
+
+// function adapted from https://staff.polito.it/claudio.fornaro/CorsoINF/Other%20interesting%20lectures/Comparing%20Floating%20Point%20Numbers.pdf
+bool almostEqual2sComplement(double A, double B, param_t* param) {
+    // make sure that the bitcast will work as intended
+    static_assert(sizeof(long long) == sizeof(double));
+    long long maxUlps = param->tolerance;
+    
+    bitcast a, b;
+    a.d = A;
+    b.d = B;
+
+    // printf("%lx %lx\n", a.l, b.l);
+
+    // Make a lexicographically ordered as a twos-complement int
+    if (a.l < 0)
+        a.l = MZERO - a.l;
+    // Make b lexicographically ordered as a twos-complement int
+    if (b.l < 0)
+        b.l = MZERO - b.l;
+    long long longdiff = llabs(a.l - b.l);
+    if (longdiff <= maxUlps)
+        return true;
+    return false;
+}
+
+
+bool almostEqual(double A, double B, param_t* param) {
+    return fabs(A - B) <= param->epsilon;
+}
 
 
 double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t params) {
     int top = -1;
-    double epsilon = params.epsilon;
     token_t* stack = (token_t*)malloc(n * sizeof(token_t));
+
+    bool (*equal)(double, double, param_t*);
+    if (params.tolerance >= 0) {
+        equal = almostEqual2sComplement;
+        // printf("Comparing using tolerance of %lld\n", params.tolerance);
+    } else {
+        equal = almostEqual;
+        // printf("Comparing using epsilon of %lf\n", params.epsilon);
+    }
 
     for (int i = 0; i < n; i++) {
         token_t* current = &input[i];
@@ -48,7 +93,7 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 break;
 
             case '!':
-                if (fabs(stack[top].value) < epsilon)
+                if (equal(stack[top].value, 0, &params))
                     stack[top].value = 0;
                 stack[top].value = !stack[top].value;
                 break;
@@ -76,14 +121,14 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                     stack[top].value /= operand;
                     break;
                 case '>':
-                    stack[top].value = stack[top].value > operand + epsilon;
+                    stack[top].value = stack[top].value > operand && !equal(stack[top].value, operand, &params);
                     break;
                 case '<':
-                    stack[top].value = stack[top].value < operand - epsilon;
+                    stack[top].value = stack[top].value < operand && !equal(stack[top].value, operand, &params);
                     break;
                 case '%':
                     double value = fmod(stack[top].value, operand);
-                    if (fabs(value - operand) < epsilon)
+                    if (equal(value, operand, &params))
                         value = 0;
                     stack[top].value = value;
                     break;
@@ -95,26 +140,24 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
             else if (current->len == 2) {
                 strswitch(current->tokenstring, 2);
                 strcase("==")
-                    stack[top].value = stack[top].value < operand + epsilon 
-                                    && stack[top].value > operand - epsilon;
+                    stack[top].value = (double)equal(stack[top].value, operand, &params);
                 strcase("!=")
-                    stack[top].value = stack[top].value < operand - epsilon 
-                                    || stack[top].value > operand + epsilon;
+                    stack[top].value = (double)(!equal(stack[top].value, operand, &params));
                 strcase(">=")
-                    stack[top].value = stack[top].value > operand - epsilon;
+                    stack[top].value = stack[top].value > operand || equal(stack[top].value, operand, &params);
                 strcase("<=")
-                    stack[top].value = stack[top].value < operand + epsilon;
+                    stack[top].value = stack[top].value < operand || equal(stack[top].value, operand, &params);
                 strcase("&&") {
-                    if (fabs(stack[top].value) < epsilon)
+                    if (equal(stack[top].value, 0, &params))
                         stack[top].value = 0;
-                    if (fabs(operand) < epsilon)
+                    if (equal(operand, 0, &params))
                         operand = 0;
                     stack[top].value = stack[top].value && operand;
                 }
                 strcase("||") {
-                    if (fabs(stack[top].value) < epsilon)
+                    if (equal(stack[top].value, 0, &params))
                         stack[top].value = 0;
-                    if (fabs(operand) < epsilon)
+                    if (equal(operand, 0, &params))
                         operand = 0;
                     stack[top].value = stack[top].value || operand;
                 }
@@ -198,7 +241,7 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 strcase("any") {
                     double res = 0;
                     for (int j = 0; j < current->numargs; j++) {
-                        if (fabs(stack[top--].value) >= epsilon)
+                        if (!equal(stack[top--].value, 0, &params))
                             res = 1;
                     }
                     stack[++top].value = res;
@@ -206,7 +249,7 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                 strcase("all") {
                     double res = 1;
                     for (int j = 0; j < current->numargs; j++) {
-                        if (fabs(stack[top--].value) < epsilon)
+                        if (equal(stack[top--].value, 0, &params))
                             res = 0;
                     }
                     stack[++top].value = res;

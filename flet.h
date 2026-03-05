@@ -28,13 +28,14 @@ typedef struct token_t {
 } token_t;
 
 typedef struct param_t {
-    // bool version;   // -v --version
-    // bool help;      // -h --help
-    bool tokenize;  // -T --tokenize
-    bool postfix;   // -P --postfix
-    bool integer;   // -I
-    double epsilon; // -E // int tolerance;
-    int digits;     // -D
+    // bool version;         // -v --version
+    // bool help;            // -h --help
+    bool tokenize;           // --tokenize
+    bool postfix;            // --postfix
+    bool integer;            // -I
+    double epsilon;          // -E
+    long long tolerance;     // -T
+    int digits;              // -D
 } param_t;
 
 

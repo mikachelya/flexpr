@@ -6,6 +6,7 @@
 #include <getopt.h>
 #include "flet.h"
 
+#define VERSION "0.0.0"
 #define ERR_NO_EXPRESSION                                                                                            \
     {                                                                                                                \
         fprintf(stderr, "Usage: %s [OPTIONS] EXPRESSION.\nFor more information, use %s --help\n", argv[0], argv[0]); \
@@ -17,45 +18,64 @@ int main(int argc, char** argv) {
         ERR_NO_EXPRESSION;
 
     param_t params;
-    params.epsilon = DBL_EPSILON;
+    // params.epsilon = DBL_EPSILON;
+    params.epsilon = -1.0; // by default, use tolerance instead of epsilon
     params.digits = 20;
     params.integer = false;
-
+    params.tokenize = false;
+    params.postfix = false;
+    params.tolerance = 500; // default tolerance in terms of number of values between two floats
 
     static struct option long_options[] = {
         {"version",  no_argument, 0, 'V'},
         {"help",     no_argument, 0, 'H'},
-        {"tokenize", no_argument, 0, 'T'},
-        {"postfix",  no_argument, 0, 'P'},
+        {"tokenize", no_argument, 0, 't'},
+        {"postfix",  no_argument, 0, 'p'},
         {0,          0,           0,  0 },
     };
 
     bool done = false;
     while (!done) {
-        char c = getopt_long(argc, argv, "+:VHTPIE:D:", long_options, NULL);
+        // "+" at the start of the string ensures argument parsing stops when a non-argument token is reached
+        // the first ":" silences arror printing
+        char c = getopt_long(argc, argv, "+:VHT:IE:D:", long_options, NULL);
         switch(c) {
         case 'V':
-            printf("0.0.0\n");
+            printf("%s\n", VERSION);
             exit(0);
         
         case 'H':
             fprintf(stderr, "Usage: %s [OPTIONS] EXPRESSION.\n", argv[0]);
             exit(0);
-        
+
         case 'T':
+            params.tolerance = atoll(optarg);
+            params.epsilon = -1.0;
+            // Make sure maxUlps is non-negative and small enough that the
+            // default NAN won't compare as equal to anything.
+            // TODO: move to arAlmostEqual2sComplementg parser, verify the 1024*1024*4 value
+            //       I believe the correct value for doubles should be 2^51
+            if (params.tolerance < 0 || params.tolerance >= 1LL << 51) {
+                fprintf(stderr, "Invalid tolerance. (0 <= T < 2^51)\n");
+                exit(1);
+            }
+            break;
+        
+        case 't':
             params.tokenize = true;
             break;
         
-        case 'P':
+        case 'p':
             params.postfix = true;
             break;
-        
+
         case 'I':
             params.integer = true;
             break;
         
         case 'E':
             params.epsilon = atof(optarg);
+            params.tolerance = -1;
             break;
 
         case 'D':
@@ -91,7 +111,7 @@ int main(int argc, char** argv) {
     if (params.integer == 0)
         printf("%.*lf\n", params.digits, result);
     else
-        printf("%ld\n", (long)result);
+        printf("%lld\n", (long long)result);
 
 
     free(tokenstream);
