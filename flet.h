@@ -15,6 +15,7 @@ typedef enum Token_type {
     LBRACKET,
     RBRACKET,
     COMMA,
+    INVALID, // results in error
     NONE,
 } Token_type;
 
@@ -42,7 +43,6 @@ typedef struct param_t {
 // tokenizer.c
 void printtokens(token_t* tokens, int n, int highlight, FILE* fp);
 token_t* tokenize(int argc, char** argv, int* ntokens);
-void printtokens(token_t* tokens, int n, int highlight, FILE* fp);
 
 // shutingyard.c
 token_t* shuntingyard(token_t* input, int ninput, int* n);

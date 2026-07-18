@@ -11,6 +11,7 @@
         printtokens(input, ninput, i, stderr);        \
         exit(2);                                      \
     }
+#define ERR_INVALID "invalid numeric literal"
 #define ERR_OPERATOR "expected operator"
 #define ERR_OPERAND "expected operand"
 #define ERR_BRACE "expected opening parentheses"
@@ -51,6 +52,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
                 ERROR(ERR_BRACE);
         if (current->type == RBRACKET && prevtype == LBRACKET)
             ERROR(ERR_EMPTY);
+        if (current->type == INVALID)
+            ERROR(ERR_INVALID);
 
         switch (current->type) {
         case PRIMARY:

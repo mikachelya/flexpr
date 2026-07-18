@@ -13,10 +13,6 @@
 
 #define NOHIGHLIGHT -1
 
-
-void printtokens(token_t* tokens, int n, int highlight, FILE* fp);
-
-
 token_t* tokenize(int argc, char** argv, int* ntokens) {
     int currentarg = 0, n = 0;
     char* current = argv[0];
@@ -67,10 +63,11 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
                 len = strlen(current);
                 currenttoken->tokenstring = (char*)malloc((len + 1) * sizeof(char));
                 strcpy(currenttoken->tokenstring, current);
-                printtokens(tokenstream, n - 1, n - 1, stderr);
+                currenttoken->type = INVALID;
+            } else {
+                currenttoken->value = value;
+                currenttoken->type = PRIMARY;
             }
-            currenttoken->value = value;
-            currenttoken->type = PRIMARY;
         }
 
         else if (current[0] == 'p' && current[1] == 'i' && !isalpha(current[2])) {
