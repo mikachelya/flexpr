@@ -40,7 +40,7 @@ bool almostEqual2sComplement(double A, double B, param_t* param) {
     a.d = A;
     b.d = B;
 
-    // printf("%lx %lx\n", a.l, b.l);
+    // printf("%llx %llx\n", a.l, b.l);
 
     // Make a lexicographically ordered as a twos-complement int
     if (a.l < 0)

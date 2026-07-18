@@ -32,7 +32,7 @@ typedef struct param_t {
     // bool help;            // -h --help
     bool tokenize;           // --tokenize
     bool postfix;            // --postfix
-    bool integer;            // -I
+    // bool integer;         // -I
     double epsilon;          // -E
     long long tolerance;     // -T
     int digits;              // -D

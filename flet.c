@@ -7,9 +7,10 @@
 #include "flet.h"
 
 #define VERSION "0.0.0"
+#define USAGE "Usage: %s [-VHI] [-T tolerance | -E epsilon] [-D num_digits] EXPRESSION.\n"
 #define ERR_NO_EXPRESSION                                                                                            \
     {                                                                                                                \
-        fprintf(stderr, "Usage: %s [OPTIONS] EXPRESSION.\nFor more information, use %s --help\n", argv[0], argv[0]); \
+        fprintf(stderr, USAGE"Try '%s --help' for more information.\n", argv[0], argv[0]); \
         exit(1);                                                                                                     \
     }
 
@@ -18,13 +19,12 @@ int main(int argc, char** argv) {
         ERR_NO_EXPRESSION;
 
     param_t params;
-    // params.epsilon = DBL_EPSILON;
-    params.epsilon = -1.0; // by default, use tolerance instead of epsilon
+    params.epsilon = DBL_EPSILON;
+    // params.epsilon = -1.0; 
+    params.tolerance = -1; 
     params.digits = 20;
-    params.integer = false;
     params.tokenize = false;
     params.postfix = false;
-    params.tolerance = 500; // default tolerance in terms of number of values between two floats
 
     static struct option long_options[] = {
         {"version",  no_argument, 0, 'V'},
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
             exit(0);
         
         case 'H':
-            fprintf(stderr, "Usage: %s [OPTIONS] EXPRESSION.\n", argv[0]);
+            fprintf(stderr, USAGE, argv[0]);
             exit(0);
 
         case 'T':
@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
             break;
 
         case 'I':
-            params.integer = true;
+            params.digits = 0;
             break;
         
         case 'E':
@@ -84,7 +84,6 @@ int main(int argc, char** argv) {
 
         case '?':
             done = true;
-            optind--;
             break;
         
         default:
@@ -108,10 +107,7 @@ int main(int argc, char** argv) {
     
     double result = evaluate(postfix, tokenstream, npostfix, ntokens, params);
 
-    if (params.integer == 0)
-        printf("%.*lf\n", params.digits, result);
-    else
-        printf("%lld\n", (long long)result);
+    printf("%.*lf\n", params.digits, result);
 
 
     free(tokenstream);
