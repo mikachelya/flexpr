@@ -20,7 +20,9 @@
         exit(3);                                                                               \
     }
 #define ERR_UNARY "unknown unary operator"
+#define ERR_UNARY_NOTHING "no operand given for unary operator"
 #define ERR_BINARY "unknown binary operator"
+#define ERR_BINARY_NOT_ENOUGH "not enough operands given for binary operator"
 #define ERR_FUNC "unknown function for the given number of operands"
 #define MZERO 0x8000000000000000 // bits corresponding to a double value of -0
 
@@ -84,6 +86,8 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
         case UNARY:
             if (current->len != 1)
                 ERROR(ERR_UNARY);
+            if (top < 0)
+                ERROR(ERR_UNARY_NOTHING); // should be unreachable
             switch (current->tokenstring[0]) {
             case '+':
                 break;
@@ -104,6 +108,8 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
             break;
         
         case BINARY:
+            if (top == 0)
+                ERROR(ERR_BINARY_NOT_ENOUGH); // should be unreachable
             double operand = stack[top--].value;
 
             if (current->len == 1) {

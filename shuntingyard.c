@@ -52,6 +52,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
                 ERROR(ERR_BRACE);
         if (current->type == RBRACKET && prevtype == LBRACKET)
             ERROR(ERR_EMPTY);
+        if (prevtype == UNARY && current->type != LBRACKET && current->type != FUNC && current->type != PRIMARY)
+            ERROR(ERR_OPERAND);
         if (current->type == INVALID)
             ERROR(ERR_INVALID);
 
@@ -127,6 +129,9 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
 
         prevtype = current->type;
     }
+
+    if (prevtype == UNARY)
+        ERROR(ERR_OPERAND);
 
     while (top >= 0) {
         //mismatched parens
