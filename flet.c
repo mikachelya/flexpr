@@ -7,7 +7,7 @@
 #include "flet.h"
 
 #define VERSION "0.0.0"
-#define USAGE "Usage: %s [-VHI] [-T tolerance | -E epsilon] [-D num_digits] EXPRESSION.\n"
+#define USAGE "Usage: %s [OPTIONS]... EXPRESSION\n"
 #define ERR_NO_EXPRESSION                                                                                            \
     {                                                                                                                \
         fprintf(stderr, USAGE"Try '%s --help' for more information.\n", argv[0], argv[0]); \
@@ -27,11 +27,15 @@ int main(int argc, char** argv) {
     params.postfix = false;
 
     static struct option long_options[] = {
-        {"version",  no_argument, 0, 'V'},
-        {"help",     no_argument, 0, 'H'},
-        {"tokenize", no_argument, 0, 't'},
-        {"postfix",  no_argument, 0, 'p'},
-        {0,          0,           0,  0 },
+        {"version",   no_argument,       0, 'V'},
+        {"help",      no_argument,       0, 'H'},
+        {"tokenize",  no_argument,       0, 't'},
+        {"postfix",   no_argument,       0, 'p'},
+        {"integer",   no_argument,       0, 'I'},
+        {"digits",    required_argument, 0, 'D'},
+        {"tolerance", required_argument, 0, 'T'},
+        {"epsilon",   required_argument, 0, 'E'},
+        {0,           0,                 0,  0 },
     };
 
     bool done = false;
