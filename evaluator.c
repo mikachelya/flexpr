@@ -58,7 +58,8 @@ bool almostEqual2sComplement(double A, double B, param_t* param) {
 
 
 bool almostEqual(double A, double B, param_t* param) {
-    return fabs(A - B) <= param->epsilon;
+    if (A == B) return true;
+    return fabs(A - B) <= fmax(fabs(A), fabs(B)) * param->epsilon;
 }
 
 
@@ -134,7 +135,8 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                     break;
                 case '%':
                     double value = fmod(stack[top].value, operand);
-                    if (equal(value, operand, &params))
+                    double quotient = stack[top].value / operand;
+                    if (equal(round(quotient), quotient, &params))
                         value = 0;
                     stack[top].value = value;
                     break;

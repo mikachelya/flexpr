@@ -4,6 +4,7 @@
 #include <float.h>
 #include <stdbool.h>
 #include <getopt.h>
+#include <ctype.h>
 #include "flet.h"
 #include "help.h"
 
@@ -89,6 +90,18 @@ int main(int argc, char** argv) {
             break;
 
         case '?':
+            // printf("stopped on arg %d\n", optind);
+            int prevarg = optind - 1;
+            if (prevarg == 0) {
+                done = true;
+                break;
+            }
+       
+            if (strcmp(argv[prevarg], "--") != 0 && argv[prevarg][0] == '-' &&
+                (isdigit(argv[prevarg][1]) || isdigit(argv[prevarg][2]) || argv[prevarg][2] == 0)) {
+                optind--;
+            }
+
             done = true;
             break;
         

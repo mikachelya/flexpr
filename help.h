@@ -28,7 +28,10 @@ Options:\n\
     -V, --version        display version information and exit\n\
 \n\
 Operators (Standard C-precedence):\n\
-  + - * / %% > < == != >= <= && || !\n\
+  Math:\n\
+    + - * / %%\n\
+  Logic (truthiness evaluated based on EPS/TOL):\n\
+    > < == != >= <= && || !\n\
 \n\
 Constants:\n\
   pi tau e\n\
@@ -43,5 +46,5 @@ Functions:\n\
     log()   common logarithm (base 10)\n\
   Aggregates (Accepts 1 or more arguments, e.g., fn(a, b, c)):\n\
     min(...)  max(...)  sum(...)  prod(...)\n\
-  Logical Aggregates (Evaluates truthiness based on EPS/TOL):\n\
+  Logical Aggregates (truthiness evaluated based on EPS/TOL):\n\
     any(...)  all(...)\n"
