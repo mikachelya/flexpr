@@ -178,6 +178,14 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
                     stack[top].value = sin(operand);
                 strcase("cos")
                     stack[top].value = cos(operand);
+                strcase("tan")
+                    stack[top].value = tan(operand);
+                strcase("asin")
+                    stack[top].value = asin(operand);
+                strcase("acos")
+                    stack[top].value = acos(operand);
+                strcase("atan")
+                    stack[top].value = atan(operand);
                 strcase("sqrt")
                     stack[top].value = sqrt(operand);
                 strcase("exp")
