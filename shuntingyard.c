@@ -27,10 +27,10 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
     char precedence[128];
     precedence['|'] = 1;
     precedence['&'] = 2;
-    precedence['<'] = 3;
-    precedence['>'] = 3;
     precedence['='] = 3;
-    precedence['!'] = 4;
+    precedence['!'] = 3;
+    precedence['<'] = 4;
+    precedence['>'] = 4;
     precedence['-'] = 5;
     precedence['+'] = 5;
     precedence['/'] = 10;
