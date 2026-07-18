@@ -70,7 +70,7 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             }
         }
 
-        else if (current[0] == 'p' && current[1] == 'i' && !isalpha(current[2])) {
+        else if (strcmp(current, "pi") == 0) {
             // read pi
             // printf("read pi ");
             len = 2;
@@ -78,11 +78,19 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             currenttoken->type = PRIMARY;
         }
 
-        else if (current[0] == 'e' && !isalpha(current[1])) {
+        else if (strcmp(current, "e") == 0) {
             // read e
             // printf("read e ");
             len = 1;
             currenttoken->value = M_E;
+            currenttoken->type = PRIMARY;
+        }
+
+        else if (strcmp(current, "tau") == 0) {
+            // read tau
+            // printf("read tau ");
+            len = 3;
+            currenttoken->value = 2 * M_PI;
             currenttoken->type = PRIMARY;
         }
 

@@ -31,7 +31,7 @@ Operators (Standard C-precedence):\n\
   + - * / %% > < == != >= <= && || !\n\
 \n\
 Constants:\n\
-  pi e\n\
+  pi tau e\n\
 \n\
 Functions:\n\
   Standard:\n\
