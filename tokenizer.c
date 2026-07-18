@@ -1,6 +1,3 @@
-#ifndef _TOKENIZER
-#define _TOKENIZER
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -177,6 +174,3 @@ void printtokens(token_t* tokens, int n, int highlight, FILE* fp) {
         putc('\n', fp);
     }
 }
-
-
-#endif

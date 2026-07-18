@@ -1,6 +1,3 @@
-#ifndef _EVALUATOR
-#define _EVALUATOR
-
 #include "flet.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -283,7 +280,3 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
 
     return stack[top].value;
 }
-
-
-
-#endif

@@ -1,6 +1,3 @@
-#ifndef _SHUNTUNGYARD
-#define _SHUNTUNGYARD
-
 #include "flet.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -146,5 +143,3 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
     free(stack);
     return output;
 }
-
-#endif
