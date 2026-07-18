@@ -5,13 +5,14 @@
 #include <stdbool.h>
 #include <getopt.h>
 #include "flet.h"
+#include "help.h"
 
 #define VERSION "0.0.0"
 #define USAGE "Usage: %s [OPTIONS]... EXPRESSION\n"
-#define ERR_NO_EXPRESSION                                                                                            \
-    {                                                                                                                \
+#define ERR_NO_EXPRESSION                                                                  \
+    {                                                                                      \
         fprintf(stderr, USAGE"Try '%s --help' for more information.\n", argv[0], argv[0]); \
-        exit(1);                                                                                                     \
+        exit(1);                                                                           \
     }
 
 int main(int argc, char** argv) {
@@ -49,7 +50,8 @@ int main(int argc, char** argv) {
             exit(0);
         
         case 'H':
-            fprintf(stderr, USAGE, argv[0]);
+            fprintf(stdout, USAGE, argv[0]);
+            fprintf(stdout, HELP, argv[0], argv[0]);
             exit(0);
 
         case 'T':
