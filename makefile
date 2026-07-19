@@ -1,7 +1,7 @@
 flags = -Wall -g
 
-fexpr: fexpr.c fexpr.h help.h object/tokenizer.o object/shuntingyard.o object/evaluator.o makefile
-	gcc $(flags) -o fexpr fexpr.c object/*.o -lm
+flexpr: flexpr.c flexpr.h help.h object/tokenizer.o object/shuntingyard.o object/evaluator.o makefile
+	gcc $(flags) -o flexpr flexpr.c object/*.o -lm
 
 object/tokenizer.o: tokenizer.c makefile | object
 	gcc $(flags) -c -o object/tokenizer.o tokenizer.c

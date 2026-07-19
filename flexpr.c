@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <getopt.h>
 #include <ctype.h>
-#include "fexpr.h"
+#include "flexpr.h"
 #include "help.h"
 
 #define VERSION "1.1.0"

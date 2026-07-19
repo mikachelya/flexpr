@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
-#include "fexpr.h"
+#include "flexpr.h"
 
 #define __USE_MISC 1
 #include <math.h>
