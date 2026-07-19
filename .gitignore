@@ -1,5 +1,5 @@
-fexpr
-.vscode
-test*
-vgcore.*
-object
+/fexpr
+/.vscode
+/test*
+/vgcore.*
+/object
