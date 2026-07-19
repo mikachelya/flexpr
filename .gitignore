@@ -3,3 +3,7 @@
 /test*
 /vgcore.*
 /object
+/flexpr-1.1.0/debian/flexpr
+/flexpr-1.1.0/debian/.debhelper
+/flexpr_*
+/flexpr-db*

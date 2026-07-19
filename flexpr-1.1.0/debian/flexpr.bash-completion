@@ -1,0 +1,29 @@
+_flexpr_completion() {
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    # The list of options available for flexpr
+    opts="-E --epsilon -T --tolerance -D --digits -I --integer --tokenize --postfix -H --help -V --version -L --logical"
+
+    case "${prev}" in
+        -E|--epsilon|-T|--tolerance)
+            # Expecting a floating-point value/tolerance value; no specific completions
+            return 0
+            ;;
+        -D|--digits)
+            # Suggest a few common decimal places
+            COMPREPLY=( $(compgen -W "0 1 2 3 4 6" -- "$cur") )
+            return 0
+            ;;
+    esac
+
+    # Complete options if the user starts typing with a dash
+    if [[ ${cur} == -* ]] ; then
+        COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+        return 0
+    fi
+}
+
+complete -F _flexpr_completion flexpr

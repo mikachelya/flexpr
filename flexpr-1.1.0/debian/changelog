@@ -1,0 +1,6 @@
+flexpr (1.1.0-1) UNRELEASED; urgency=low
+
+  * Initial release. Closes: #nnnn
+    <nnnn is the bug number of your ITP>
+
+ -- mikachelya <mikachelya@gmail.com>  Sun, 19 Jul 2026 22:20:46 +0200
