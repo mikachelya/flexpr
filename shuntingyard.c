@@ -21,6 +21,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
     int noutput = 0, top = -1;
     token_t* output = (token_t*)malloc(ninput * sizeof(token_t));
     token_t* stack = (token_t*)malloc(ninput * sizeof(token_t));
+    token_t** funcstack = (token_t**)malloc(ninput * sizeof(token_t*));
+    int topfunc = -1;
 
     char precedence[128];
     precedence['|'] = 1;
@@ -34,7 +36,6 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
     precedence['/'] = 10;
     precedence['*'] = 10;
 
-    token_t* lastfunc = NULL;
     Token_type prevtype = NONE;
 
     int i;
@@ -61,8 +62,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
 
         case FUNC:
             stack[++top] = *current;
-            lastfunc = &stack[top];
-            lastfunc->numargs = 1;
+            funcstack[++topfunc] = &stack[top];
+            funcstack[topfunc]->numargs = 1;
             break;
 
         case UNARY:
@@ -85,11 +86,11 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
         case COMMA:
             if (prevtype == COMMA)
                 ERROR(ERR_ARG);
-            if (lastfunc == NULL) // TODO: flexpr "sum(sin(1), 2)" forgets about the sum
+            if (topfunc < 0) // TODO: flexpr "sum(sin(1), 2)" forgets about the sum
                 ERROR(ERR_COMMA);
             while (top >= 0 && stack[top].type != LBRACKET)
                 output[noutput++] = stack[top--];
-            lastfunc->numargs++;
+            funcstack[topfunc]->numargs++;
             break;
 
         case LBRACKET:
@@ -107,15 +108,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
             // trash the opening paren
             top--;
             if (stack[top].type == FUNC) {
+                topfunc--;
                 output[noutput++] = stack[top--];
-                // find the top function
-                lastfunc = NULL;
-                for (int i = top; i >= 0; i--) {
-                    if (stack[top].type == FUNC) {
-                        lastfunc = &stack[top];
-                        break;
-                    }
-                }
             }
             break;
         
