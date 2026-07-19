@@ -1,0 +1,5 @@
+fexpr (1.1.0-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- mikachelya <mikachelya@gmail.com>  Sun, 19 Jul 2026 18:17:59 +0200

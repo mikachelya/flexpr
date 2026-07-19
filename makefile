@@ -1,16 +1,23 @@
-flags = -Wall -g
+CC      ?= gcc
+CFLAGS  ?= -Wall -g
+LDFLAGS ?=
+LDLIBS  := -lm
 
-fexpr: fexpr.c fexpr.h help.h object/tokenizer.o object/shuntingyard.o object/evaluator.o makefile
-	gcc $(flags) -o fexpr fexpr.c object/*.o -lm
+OBJDIR  := object
+OBJS    := $(OBJDIR)/tokenizer.o $(OBJDIR)/shuntingyard.o $(OBJDIR)/evaluator.o
 
-object/tokenizer.o: tokenizer.c makefile | object
-	gcc $(flags) -c -o object/tokenizer.o tokenizer.c
+.PHONY: all clean
 
-object/shuntingyard.o: shuntingyard.c makefile | object
-	gcc $(flags) -c -o object/shuntingyard.o shuntingyard.c
+all: fexpr
 
-object/evaluator.o: evaluator.c makefile | object
-	gcc $(flags) -c -o object/evaluator.o evaluator.c
+fexpr: fexpr.c fexpr.h help.h $(OBJS) | $(OBJDIR)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ fexpr.c $(OBJS) $(LDLIBS)
 
-object:
-	mkdir -p object
+$(OBJDIR)/%.o: %.c makefile | $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+clean:
+	rm -rf $(OBJDIR) fexpr
