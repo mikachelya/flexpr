@@ -8,7 +8,7 @@
 #include "fexpr.h"
 #include "help.h"
 
-#define VERSION "1.0.0"
+#define VERSION "1.1.0"
 #define USAGE "Usage: %s [OPTIONS]... EXPRESSION\n"
 #define ERR_NO_EXPRESSION                                                                  \
     {                                                                                      \
@@ -27,11 +27,13 @@ int main(int argc, char** argv) {
     params.digits = 20;
     params.tokenize = false;
     params.postfix = false;
+    params.logical = false;
 
     static struct option long_options[] = {
         {"version",   no_argument,       0, 'V'},
         {"help",      no_argument,       0, 'H'},
         {"tokenize",  no_argument,       0, 't'},
+        {"logical",   no_argument,       0, 'L'},
         {"postfix",   no_argument,       0, 'p'},
         {"integer",   no_argument,       0, 'I'},
         {"digits",    required_argument, 0, 'D'},
@@ -44,7 +46,7 @@ int main(int argc, char** argv) {
     while (!done) {
         // "+" at the start of the string ensures argument parsing stops when a non-argument token is reached
         // the first ":" silences arror printing
-        char c = getopt_long(argc, argv, "+:VHT:IE:D:", long_options, NULL);
+        char c = getopt_long(argc, argv, "+:VHT:LIE:D:", long_options, NULL);
         switch(c) {
         case 'V':
             printf("%s\n", VERSION);
@@ -74,6 +76,10 @@ int main(int argc, char** argv) {
         
         case 'p':
             params.postfix = true;
+            break;
+        
+        case 'L':
+            params.logical = true;
             break;
 
         case 'I':
@@ -126,11 +132,14 @@ int main(int argc, char** argv) {
     
     double result = evaluate(postfix, tokenstream, npostfix, ntokens, params);
 
-    printf("%.*lf\n", params.digits, result);
-
+    if (!params.logical)
+        printf("%.*lf\n", params.digits, result);
 
     free(tokenstream);
     free(postfix);
+
+    if (params.logical)
+        return !result;
 
     return 0;
 }

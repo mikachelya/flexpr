@@ -6,18 +6,21 @@ Options:\n\
   Precision:\n\
     These options determine which values are considered equal\n\
     -E, --epsilon=EPS    set epsilon value (default DBL_EPSILON, ~2.22e-16);\n\
-                         mutually exclusive with -T\n\
+                         overriden by subsequent -T flags\n\
     -T, --tolerance=TOL  set tolerance in terms of the number of double-\n\
                          precision values between the compared numbers;\n\
-                         mutually exclusive with -E\n\
+                         overriden by subsequent -E flags\n\
 \n\
   Output:\n\
     -D, --digits=NUM     round the output to the specified number of digits\n\
                          after the decimal point (rounds to even)\n\
-                         mutually exclusive with -I\n\
+                         overriden by subsequent -I flags\n\
     -I, --integer        rounds the output to an integer;\n\
                          equivalent to -D 0;\n\
-                         mutually exclusive with -D\n\
+                         overriden by subsequent -D flags\n\
+    -L, --logical        mutes result printing, overriding -D and -I;\n\
+                         exit with 1 if result is zero/false, 0 otherwise;\n\
+                         truthiness evaluated based on EPS/TOL\n\
 \n\
   Debug:\n\
     --tokenize           display the output of the tokenization stage\n\

@@ -278,5 +278,8 @@ double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t
         }
     }
 
+    if (params.logical)
+        return !equal(stack[top].value, 0, &params);
+
     return stack[top].value;
 }
