@@ -1,5 +1,5 @@
-#ifndef _FLET_H
-#define _FLET_H
+#ifndef _FEXPR_H
+#define _FEXPR_H
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -50,4 +50,4 @@ token_t* shuntingyard(token_t* input, int ninput, int* n);
 // evaluator.x
 double evaluate(token_t* input, token_t* original, int n, int noriginal, param_t params);
 
-#endif /* flet.h */
+#endif /* fexpr.h */

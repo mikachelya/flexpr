@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <getopt.h>
 #include <ctype.h>
-#include "flet.h"
+#include "fexpr.h"
 #include "help.h"
 
 #define VERSION "1.0.0"
