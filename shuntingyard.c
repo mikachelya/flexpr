@@ -1,4 +1,4 @@
-#include "fexpr.h"
+#include "flexpr.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -85,7 +85,7 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
         case COMMA:
             if (prevtype == COMMA)
                 ERROR(ERR_ARG);
-            if (lastfunc == NULL) // TODO: fexpr "sum(sin(1), 2)" forgets about the sum
+            if (lastfunc == NULL) // TODO: flexpr "sum(sin(1), 2)" forgets about the sum
                 ERROR(ERR_COMMA);
             while (top >= 0 && stack[top].type != LBRACKET)
                 output[noutput++] = stack[top--];
