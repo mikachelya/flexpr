@@ -1,8 +1,3 @@
-Description: Add install/clean targets, honor CFLAGS/CPPFLAGS/LDFLAGS, and support DESTDIR
- Honor environment compiler flags for Debian hardening and provide standard
- install/clean targets.
-Author: mikachelya <mikachelya@gmail.com>
-Forwarded: not-needed
 Index: flexpr-1.1.1/makefile
 ===================================================================
 --- flexpr-1.1.1.orig/makefile
