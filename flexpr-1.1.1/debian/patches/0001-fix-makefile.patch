@@ -1,3 +1,6 @@
+Description: Fix upstream makefile installation paths and flags
+Author: mikachelya <mikachelya@gmail.com>
+Forwarded: not-needed
 Index: flexpr-1.1.1/makefile
 ===================================================================
 --- flexpr-1.1.1.orig/makefile
