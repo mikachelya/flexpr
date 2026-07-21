@@ -12,3 +12,5 @@
 /flexpr-1.1.1/debian/files
 /flexpr-1.1.1/debian/*.log
 /flexpr-1.1.1/debian/*.substvars
+*.patch~
+.pc

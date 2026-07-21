@@ -14,10 +14,10 @@ MANDIR  := $(DESTDIR)$(prefix)/share/man/man1
 all: flexpr
 
 flexpr: flexpr.c flexpr.h help.h $(OBJS) | $(OBJDIR)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ flexpr.c $(OBJS) $(LDLIBS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ flexpr.c $(OBJS) $(LDLIBS)
 
 $(OBJDIR)/%.o: %.c makefile | $(OBJDIR)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
@@ -29,10 +29,10 @@ install: flexpr
 	# Ensure the target directories exist in the build staging area
 	install -d $(BINDIR)
 	install -d $(MANDIR)
-	
+
 	# Install the binary with proper executable permissions (rwxr-xr-x)
 	install -m 755 flexpr $(BINDIR)/flexpr
-	
+
 	# Install the manual page with read-only permissions (rw-r--r--)
 	# (Uncomment this once your pandoc/ronn manpage is ready)
 	# install -m 644 flexpr.1 $(MANDIR)/flexpr.1
