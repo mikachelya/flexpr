@@ -10,6 +10,27 @@
 
 #define NOHIGHLIGHT -1
 
+/*
+TODO: && incorrectly parsed in this case
+flexpr --tokenize "1 + &&1"
+1 + & & 1 
+Error: expected operand.
+1 + & & 1 
+
+TODO:
+flexpr -Z
+./tests/tests.sh: line 30: warning: command substitution: ignored null byte in input
+
+TODO:
+flexpr -I "max(,1)"
+1
+
+TODO:
+flexpr -I "sum((2, 2 + (3, 4)))"
+11
+*/
+
+
 bool readconst(char* current, const char* constant);
 
 token_t* tokenize(int argc, char** argv, int* ntokens) {

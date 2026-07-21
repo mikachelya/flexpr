@@ -13,8 +13,14 @@
 #define ERR_NO_EXPRESSION                                                                  \
     {                                                                                      \
         fprintf(stderr, USAGE"Try '%s --help' for more information.\n", argv[0], argv[0]); \
-        exit(1);                                                                           \
+        exit(4);                                                                           \
     }
+
+bool is_negative_operand(const char *str) {
+    if (str[0] != '-' || str[1] == '\0') return false;
+    return !isupper(str[1]);
+}
+
 
 int main(int argc, char** argv) {
     if (argc == 1)
@@ -95,23 +101,41 @@ int main(int argc, char** argv) {
             params.digits = atoi(optarg);
             break;
 
+        // encountered unknown argument
+        // if the argument was a single character (such as -e), it is consumed.
+        // in that case we need to decrement optind.
         case '?':
-            // printf("stopped on arg %d\n", optind);
-            int prevarg = optind - 1;
-            if (prevarg == 0) {
-                done = true;
-                break;
-            }
-       
-            if (strcmp(argv[prevarg], "--") != 0 && argv[prevarg][0] == '-' &&
-                (isdigit(argv[prevarg][1]) || isdigit(argv[prevarg][2]) || argv[prevarg][2] == 0)) {
-                optind--;
+            // printf("stopped on arg %d, optopt %c\n", optind, optopt);
+            // 1. Hard error on invalid uppercase flags (-F, -IF, etc.)
+            if (optopt != 0 && isupper((unsigned char)optopt)) {
+                fprintf(stderr, "Error: Unknown option '-%c'\n", optopt);
+                exit(4);
             }
 
+            // 2. Check if the error happened inside an attached cluster (e.g. -I1 or -Ae)
+            // If argv[optind - 1] starts with '-' and has more than 2 chars, 
+            // it means valid flags ran before hitting this character in the same string!
+            char *prev_arg = argv[optind - 1];
+            if (prev_arg[0] == '-' && strlen(prev_arg) > 2) {
+                if (optopt != 0)
+                    fprintf(stderr, "Error: Invalid option '-%c' in cluster '%s'\n", optopt, prev_arg);
+                else
+                    fprintf(stderr, "Error: Invalid long option '%s'\n", prev_arg);
+                exit(4);
+            }
+
+            // 3. It's a standalone negative operand (-1, -1+1, -e)
+            // Rewind optind ONLY if getopt consumed the standalone token (e.g. "-1")
+            if (prev_arg[0] == '-' && prev_arg[1] == optopt && prev_arg[2] == '\0') {
+                optind--;
+            }
             done = true;
             break;
         
+        // argument parsing finished normally
         default:
+            // printf("default on arg %d\n", optind);
+
             done = true;
             break;
         }
