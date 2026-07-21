@@ -1,23 +1,18 @@
 Source: flexpr
-Section: Mathematics
+Section: math
 Priority: optional
 Maintainer: mikachelya <mikachelya@gmail.com>
-Rules-Requires-Root: no
-Build-Depends:
- debhelper-compat (= 13),
- debhelper (>=9),
- bash-completion,
+Build-Depends: bash-completion, debhelper (>=9), debhelper-compat (= 13)
 Standards-Version: 4.6.2
-Homepage: https://github.com/mikachelya/flexpr
-Vcs-Browser: https://github.com/mikachelya/flexpr
-Vcs-Git: https://github.com/mikachelya/flexpr.git
+Homepage: https://github.com/mikachelya/fexpr
+Rules-Requires-Root: no
+Vcs-Browser: https://github.com/mikachelya/fexpr
+Vcs-Git: https://github.com/mikachelya/fexpr.git
 
 Package: flexpr
 Architecture: any
 Multi-Arch: foreign
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
+Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: fast CLI floating-point calculator for shell scripts
  flexpr is a command line calculator designed to complement the common 'expr'
  utility. It provides double-precision floating point calculation with logic
