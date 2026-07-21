@@ -290,10 +290,11 @@ PI
 3 Error: unknown function for the given number of operands "PI"
 
 TAU
-3 Error: unknown function for the given number of operands "PI"
+3 Error: unknown function for the given number of operands "TAU"
 
 ""
 4 Usage: ./flexpr [OPTIONS]... EXPRESSION
 
 "   "
 4 Usage: ./flexpr [OPTIONS]... EXPRESSION
+
