@@ -5,5 +5,7 @@
 #
 # !!! Please make sure to edit this to a valid test, otherwise build will fails
 #
-#Tests: testcode.sh
 #Restrictions: allow-stderr, breaks-testbed, needs-internet, needs-root
+
+Tests: tests.sh
+Depends: @
