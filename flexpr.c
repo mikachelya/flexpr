@@ -8,7 +8,7 @@
 #include "flexpr.h"
 #include "help.h"
 
-#define VERSION "1.1.2"
+#define VERSION "1.1.3"
 #define USAGE "Usage: %s [OPTIONS]... EXPRESSION\n"
 #define ERR_NO_EXPRESSION                                                                  \
     {                                                                                      \
