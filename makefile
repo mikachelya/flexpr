@@ -17,3 +17,6 @@ object:
 
 test: flexpr
 	./tests/tests.sh
+
+release:
+	flags=-o3 make
