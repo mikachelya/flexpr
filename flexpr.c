@@ -8,7 +8,7 @@
 #include "flexpr.h"
 #include "help.h"
 
-#define VERSION "1.1.3"
+#define VERSION "1.1.4"
 #define USAGE "Usage: %s [OPTIONS]... EXPRESSION\n"
 #define ERR_NO_EXPRESSION                                                                  \
     {                                                                                      \
@@ -118,9 +118,9 @@ int main(int argc, char** argv) {
             char *prev_arg = argv[optind - 1];
             if (prev_arg[0] == '-' && strlen(prev_arg) > 2) {
                 if (optopt != 0)
-                    fprintf(stderr, "Error: Invalid option '-%c' in cluster '%s'\n", optopt, prev_arg);
+                    fprintf(stderr, "Error: Unknown option '-%c' in cluster '%s'\n", optopt, prev_arg);
                 else
-                    fprintf(stderr, "Error: Invalid long option '%s'\n", prev_arg);
+                    fprintf(stderr, "Error: Unknown long option '%s'\n", prev_arg);
                 exit(4);
             }
 
@@ -146,6 +146,8 @@ int main(int argc, char** argv) {
 
     int ntokens;
     token_t* tokenstream = tokenize(argc - optind, &argv[optind], &ntokens);
+    if (ntokens == 0)
+        ERR_NO_EXPRESSION;
     if (params.tokenize)
         printtokens(tokenstream, ntokens, NOHIGHLIGHT, stdout);
 

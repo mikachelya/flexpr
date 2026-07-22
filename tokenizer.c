@@ -137,8 +137,6 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             else if (prevtype == PRIMARY || prevtype == RBRACKET) {
                 currenttoken->type = BINARY;
                 currenttoken->numargs = 2;
-                if (current[1] == '=' || strncmp(current, "&&", 2) == 0 || strncmp(current, "||", 2) == 0)
-                    len++;
             }
             else {
                 currenttoken->type = UNARY;
@@ -146,7 +144,9 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             }
             
         }
-
+        
+        if (current[1] == '=' || strncmp(current, "&&", 2) == 0 || strncmp(current, "||", 2) == 0)
+            len++;
         currenttoken->len = len;
         currenttoken->tokenstring = current;
         currenttoken->tokenidx = n - 1;

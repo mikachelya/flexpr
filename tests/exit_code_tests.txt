@@ -1,5 +1,5 @@
 -I1 1
-4 Error: Invalid option '-1' in cluster '-I1'
+4 Error: Unknown option '-1' in cluster '-I1'
 
 -D1 0
 0
@@ -125,16 +125,16 @@ asdjha(1)
 4 Error: Unknown option '-Z'
 
 --unknown-flag
-4 Error: Invalid long option '--unknown-flag'
+4 Error: Unknown long option '--unknown-flag'
 
 --unknown-flag2
-4 Error: Invalid long option '--unknown-flag2'
+4 Error: Unknown long option '--unknown-flag2'
 
 --unknown-flag=2
-4 Error: Invalid long option '--unknown-flag=2'
+4 Error: Unknown long option '--unknown-flag=2'
 
 --unknown-flag 2
-4 Error: Invalid long option '--unknown-flag'
+4 Error: Unknown long option '--unknown-flag'
 
 -1+1
 0

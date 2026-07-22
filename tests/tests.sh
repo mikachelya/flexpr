@@ -7,7 +7,7 @@ flexpr --help
 echo "Smoke test passed successfully!"
 
 PASSED=2
-FAILDE=0
+FAILED=0
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 while read -r args && read -r expected; do
