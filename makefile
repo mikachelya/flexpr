@@ -1,4 +1,4 @@
-flags = -Wall -Wextra -g
+flags ?= -Wall -Wextra -g
 
 flexpr: flexpr.c flexpr.h help.h object/tokenizer.o object/shuntingyard.o object/evaluator.o makefile
 	gcc $(flags) -o flexpr flexpr.c object/*.o -lm
