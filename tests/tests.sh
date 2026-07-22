@@ -46,3 +46,5 @@ while read -r args_line && read -r expected_line && read -r _; do
 done < $SCRIPT_DIR/exit_code_tests.txt
 
 echo $PASSED passed, $FAILED failed
+
+exit $FAILED
