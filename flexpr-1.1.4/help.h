@@ -47,7 +47,7 @@ Functions:\n\
   Logarithms:\n\
     ln()    natural logarithm (base e)\n\
     log()   common logarithm (base 10)\n\
-  Aggregates (accepts 1 or more arguments):\n\
+  Aggregates (accept 1 or more arguments):\n\
     min(...)  max(...)  sum(...)  prod(...)\n\
   Logical Aggregates (truthiness evaluated based on EPS/TOL):\n\
     any(...)  all(...)\n"

@@ -1,12 +1,12 @@
 Description: Fix upstream makefile installation paths and flags
 Author: mikachelya <mikachelya@gmail.com>
 Forwarded: not-needed
-Index: flexpr-1.1.1/makefile
+Index: flexpr-1.1.4/makefile
 ===================================================================
---- flexpr-1.1.1.orig/makefile
-+++ flexpr-1.1.1/makefile
-@@ -1,16 +1,45 @@
--flags = -Wall -g
+--- flexpr-1.1.4.orig/makefile
++++ flexpr-1.1.4/makefile
+@@ -1,22 +1,45 @@
+-flags ?= -Wall -Wextra -g
 +CC      ?= gcc
 +CFLAGS  ?= -Wall -g
 +LDFLAGS ?=
@@ -35,13 +35,17 @@ Index: flexpr-1.1.1/makefile
  
 -object:
 -	mkdir -p object
-\ No newline at end of file
 +$(OBJDIR)/%.o: %.c makefile | $(OBJDIR)
 +	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
-+
+ 
+-test: flexpr
+-	./tests/tests.sh
 +$(OBJDIR):
 +	mkdir -p $(OBJDIR)
-+
+ 
+-release:
+-	flags=-o3 make
+\ No newline at end of file
 +clean:
 +	rm -rf $(OBJDIR) flexpr
 +

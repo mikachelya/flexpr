@@ -10,6 +10,29 @@
 
 #define NOHIGHLIGHT -1
 
+/*
+TODO: && incorrectly parsed in this case
+flexpr --tokenize "1 + &&1"
+1 + & & 1 
+Error: expected operand.
+1 + & & 1 
+
+TODO:
+flexpr -Z
+./tests/tests.sh: line 30: warning: command substitution: ignored null byte in input
+
+TODO:
+flexpr -I "max(,1)"
+1
+
+TODO:
+flexpr -I "sum((2, 2 + (3, 4)))"
+11
+*/
+
+
+bool readconst(char* current, const char* constant);
+
 token_t* tokenize(int argc, char** argv, int* ntokens) {
     int currentarg = 0, n = 0;
     char* current = argv[0];
@@ -67,7 +90,7 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             }
         }
 
-        else if (strcmp(current, "pi") == 0) {
+        else if (readconst(current, "pi")) {
             // read pi
             // printf("read pi ");
             len = 2;
@@ -75,7 +98,7 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             currenttoken->type = PRIMARY;
         }
 
-        else if (strcmp(current, "e") == 0) {
+        else if (readconst(current, "e")) {
             // read e
             // printf("read e ");
             len = 1;
@@ -83,7 +106,7 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             currenttoken->type = PRIMARY;
         }
 
-        else if (strcmp(current, "tau") == 0) {
+        else if (readconst(current, "tau")) {
             // read tau
             // printf("read tau ");
             len = 3;
@@ -114,8 +137,6 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             else if (prevtype == PRIMARY || prevtype == RBRACKET) {
                 currenttoken->type = BINARY;
                 currenttoken->numargs = 2;
-                if (current[1] == '=' || strncmp(current, "&&", 2) == 0 || strncmp(current, "||", 2) == 0)
-                    len++;
             }
             else {
                 currenttoken->type = UNARY;
@@ -123,7 +144,9 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
             }
             
         }
-
+        
+        if (current[1] == '=' || strncmp(current, "&&", 2) == 0 || strncmp(current, "||", 2) == 0)
+            len++;
         currenttoken->len = len;
         currenttoken->tokenstring = current;
         currenttoken->tokenidx = n - 1;
@@ -142,6 +165,12 @@ token_t* tokenize(int argc, char** argv, int* ntokens) {
 
     *ntokens = n;
     return tokenstream;
+}
+
+
+bool readconst(char* current, const char* constant) {
+    size_t len = strlen(constant);
+    return strncmp(current, constant, len) == 0 && !isalpha(current[len]);
 }
 
 

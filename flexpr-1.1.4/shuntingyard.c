@@ -84,9 +84,9 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
             break;
         
         case COMMA:
-            if (prevtype == COMMA)
+            if (prevtype == COMMA || prevtype == LBRACKET)
                 ERROR(ERR_ARG);
-            if (topfunc < 0) // TODO: flexpr "sum(sin(1), 2)" forgets about the sum
+            if (topfunc < 0 || funcstack[topfunc]->type != FUNC)
                 ERROR(ERR_COMMA);
             while (top >= 0 && stack[top].type != LBRACKET)
                 output[noutput++] = stack[top--];
@@ -95,6 +95,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
 
         case LBRACKET:
             stack[++top] = *current;
+            if (prevtype != FUNC)
+                funcstack[++topfunc] = &stack[top];
             break;
         
         case RBRACKET:
@@ -107,8 +109,8 @@ token_t* shuntingyard(token_t* input, int ninput, int* n) {
                 ERROR(ERR_UNBALANCED);
             // trash the opening paren
             top--;
+            topfunc--;
             if (stack[top].type == FUNC) {
-                topfunc--;
                 output[noutput++] = stack[top--];
             }
             break;
